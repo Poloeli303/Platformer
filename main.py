@@ -6,11 +6,10 @@ screen.fill((0,0,0))
 clock = pygame.time.Clock() #set up clock
 gameover = False #variable to run our game loop
 
-Mark = pygame.image.load('dude.png') #load your spritesheet
-Mark.set_colorkey((255, 0, 255)) #this makes bright pink (255, 0, 255) transparent (sort of)
+Link = pygame.image.load('ash1.png') #load your spritesheet
+Link.set_colorkey((255, 0, 255)) #this makes bright pink (255, 0, 255) transparent (sort of)
 red = (255,0,0)
 purple = (200,0,200)
-Mark = pygame.transform.scale(Mark, (2, 2))
 
 #CONSTANTS
 LEFT=0
@@ -45,7 +44,7 @@ class Square:
 
 #player variables
 Px= 600 #xpos of player
-Py= 750 #ypos of player
+Py= 700 #ypos of player
 vx = 0 #x velocity of player
 vy = 0 #y velocity of player
 keys = [False, False, False, False] #this list holds whether each key has been pressed
@@ -56,8 +55,8 @@ music = pygame.mixer.music.load('music.wav')
 pygame.mixer.music.play(-1)
 
 #animation variables variables
-frameWidth = 16
-frameHeight = 16
+frameWidth = 47
+frameHeight = 52
 RowNum = 0 #for left animation, this will need to change for other animations
 frameNum = 0
 ticker = 0
@@ -117,62 +116,45 @@ while not gameover: #GAME LOOP##################################################
         isOnGround = False
         direction = UP
         pygame.mixer.Sound.play(jump)
-    
-    #ANIMATION-------------------------------------------------------------------
-        
-    # Update Animation Information
-    # Only animate when in motion
-    if vx>0:
-        RowNum = 0
-    if vx < 0: #left animation
-        RowNum = 1
-        # Ticker is a spedometer. We don't want Link animating as fast as the
-        # processor can process! Update Animation Frame each time ticker goes over
-        ticker+=1
-        if ticker%10==0: #only change frames every 10 ticks
-          frameNum+=1
-           #If we are over the number of frames in our sprite, reset to 0.
-           #In this particular case, there are 10 frames (0 through 9)
-        if frameNum>3: 
-           frameNum = 0
-    
+ 
     #COLLISION
         
     isOnGround = False
     if p1.collide(Px, Py) != False:
         isOnGround = True
         vy = 0
-        Py = p1.collide(Px, Py) - 20 
+        Py = p1.collide(Px, Py) - 60 
 
     elif p2.collide(Px, Py) != False:
         isOnGround = True
         vy = 0
-        Py = p2.collide(Px, Py)  - 20
+        Py = p2.collide(Px, Py)  - 60
      
     elif p3.collide(Px, Py) != False:
         isOnGround = True
         vy = 0
-        Py = p3.collide(Px, Py)  - 20
+        Py = p3.collide(Px, Py)  - 60
         
     elif p4.collide(Px, Py) != False:
         isOnGround = True
         vy = 0
-        Py = p4.collide(Px, Py)  - 20
+        Py = p4.collide(Px, Py)  - 60
         
     elif p5.collide(Px, Py) != False:
         isOnGround = True
         vy = 0
-        Py = p5.collide(Px, Py)  - 20
+        Py = p5.collide(Px, Py)  - 60
+        
     elif s1.collide(Px, Py) != False:
         isOnGround = True
         vy = 0
-        Py = s1.collide(Px, Py)  -20
+        Py = s1.collide(Px, Py)  -60
     print(isOnGround)
     #stop falling if on bottom of game screen
-    if Py > 780:
+    if Py > 750:
         isOnGround = True
         vy = 0
-        Py = 780
+        Py = 750
     
     #gravity
     if isOnGround == False:
@@ -182,14 +164,36 @@ while not gameover: #GAME LOOP##################################################
     #update player position
     Px+=vx 
     Py+=vy
-    
+      #ANIMATION-------------------------------------------------------------------
+        
+    # Update Animation Information
+    # Only animate when in motion
+    if vx>0:
+        RowNum = 0
+    if vx < 0: #left animation
+        RowNum = 2
+        ticker+=1
+        if ticker%10==0:
+          frameNum+=1
+           
+        if frameNum>3: 
+           frameNum = 0
+           
+    if vx > 0: #left animation
+        RowNum = 3
+        ticker+=1
+        if ticker%10==0:
+          frameNum+=1
+           
+        if frameNum>3: 
+           frameNum = 0
   
     # RENDER Section--------------------------------------------------------------------------------
             
     screen.fill((0,0,0)) #wipe screen so it doesn't smear
-    screen.blit(Mark, (Px,Py), (frameWidth*frameNum*2, RowNum*frameHeight*2, frameWidth, frameHeight))
     #pygame.draw.rect(screen, (purple), (Px, Py, 20, 40))
-    
+    screen.blit(Link, (Px, Py), (frameWidth*frameNum, RowNum*frameHeight, frameWidth, frameHeight))
+
     
     #class platforms
     p1.draw()
